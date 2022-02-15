@@ -2,8 +2,9 @@
 
 ## Introduction
 These are FitNesse (http://fitnesse.org) Fixtures für Rest Api Testing included in an Eclipse Java project.
+The project requires JavaSE-1.8
 
-Supported formats:
+Actual supported formats:
 - Json
 
 ## FitNesse import fixtures
@@ -106,4 +107,4 @@ This could be the validation
 ```
 
 ## Examples
-You can find more examples within the "MyApiFixturesExampleSuite"
+You can find more examples within the "FitNesseRoot/MyApiFixturesExampleSuite"
