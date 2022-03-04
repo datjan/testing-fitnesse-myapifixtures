@@ -1,5 +1,0 @@
-{
-    "type":"${type}", 	
-    "email":"${email}", 	
-    "password":"${password}"	 	
-}
