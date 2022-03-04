@@ -78,6 +78,17 @@ Add parameter to request
 |password  |123abc!    |ok    |
 ```
 
+Use symbol in Body
+```
+!|My Api Request Body        |
+|Body                  |Init?|
+|{"type":"#{req_type}"}|ok   |
+
+!|My Api Request Variables|
+|Name     |Value=   |Init?|
+|req_type |sym_type |ok   |
+```
+
 ## Advanced usage - response validation
 These Fixtures can be used to validate the response.
 
@@ -106,5 +117,19 @@ This could be the validation
 |json  |root.basicdata.plainarray[count]              |3                                                  |res_symbol|
 ```
 
+Usage of symbol in value
+```
+!|My Api Response Body Validator|
+|Parser  |Identifier  |Value?=  |
+|json    |root[1]     |sym_name |
+```
+
+Usage of symbol in identifier
+```
+!|My Api Response Body Validator        |
+|Parser|Identifier  |Variable=   |Value?|
+|json  |root[#{var}]|sym_position|nils  |
+```
+
 ## Examples
-You can find more examples within the "FitNesseRoot/MyApiFixturesExampleSuite"
+You can find more examples within the "MyApiFixturesExampleSuite"
