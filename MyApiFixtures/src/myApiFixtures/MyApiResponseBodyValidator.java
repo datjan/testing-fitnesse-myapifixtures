@@ -12,10 +12,16 @@ public class MyApiResponseBodyValidator extends ColumnFixture{
 
 	String Parser = "";
 	String Identifier = "";
+	String Variable = "";
 
 	public String Value() throws IOException{
 		
 		String result = "failed";
+		
+		// Set Variable
+		if (!Variable.equals("")) {
+			Identifier = Identifier.replace("#{var}", Variable);
+		}
 		
 		// Select Parser
 		if (Parser.equals("json")) {
