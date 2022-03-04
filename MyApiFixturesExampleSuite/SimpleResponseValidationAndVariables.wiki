@@ -1,0 +1,47 @@
+---
+Test
+---
+---- Path to FitNesse.jar and Fixture Project ----
+
+!path /Users/jan/Documents/FitNesse/fitnesse-standalone.jar
+!path /Users/jan/Documents/eclipse-workspace/MyApiFixtures/bin
+
+!define TEST_SYSTEM {fit}
+
+
+
+---- Import Fixtures ----
+
+|Import       |
+|myApiFixtures|
+
+
+
+
+---- Test Example ----
+
+!style_code[Manipulate Response Body only for Validator Test]
+!|My Api Response Body             |
+|Body                    |Set Body?|
+|["bernd","nils","harry"]|ok       |
+
+!style_code[Check Response Body Content]
+!|My Api Response Body|
+|Get Body?            |
+|                     |
+
+
+!style_code[Set Variables]
+!define var_name {nils}
+!define var_count {3}
+!define var_position {1}
+
+!style_code[Response Validation - ok]
+!|My Api Response Body Validator                     |
+|Parser|Identifier           |Value?      |=Value?   |
+|json  |root[1]              |${var_name} |res_symbol|
+|json  |root[count]          |${var_count}|res_symbol|
+|json  |root[${var_position}]|nils        |res_symbol|
+
+
+

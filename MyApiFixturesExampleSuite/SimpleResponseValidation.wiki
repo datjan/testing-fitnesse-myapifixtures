@@ -1,0 +1,116 @@
+---
+Test
+---
+---- Path to FitNesse.jar and Fixture Project ----
+
+!path /Users/jan/Documents/FitNesse/fitnesse-standalone.jar
+!path /Users/jan/Documents/eclipse-workspace/MyApiFixtures/bin
+
+!define TEST_SYSTEM {fit}
+
+
+
+---- Import Fixtures ----
+
+|Import       |
+|myApiFixtures|
+
+
+
+
+---- Test Example - JSON 1 ----
+
+!style_code[Manipulate Response Body only for Validator Test]
+!|My Api Response Body                                                                                                                                                                                                                 |
+|Body                                                                                                                                                                                                                        |Set Body?|
+|{"success":true,"basicdata":{"pointofsales":[{"id":"1","name":"Ebay","number":123},{"id":"2","name":"Ebay Kleinanzeigen","number":456},{"id":"3","name":"WooCommerce","number":789}],"plainarray":["bernd","nils","harry"]}}|ok       |
+
+!style_code[Check Response Body Content]
+!|My Api Response Body|
+|Get Body?            |
+|                     |
+
+!style_code[Response Validation - ok]
+!|My Api Response Body Validator                                                                                     |
+|Parser|Identifier                                    |Value?                                             |=Value?   |
+|json  |root.success                                  |true                                               |res_symbol|
+|json  |root.basicdata.pointofsales[1].name           |Ebay Kleinanzeigen                                 |res_symbol|
+|json  |root.basicdata.pointofsales[id=3].name        |WooCommerce                                        |res_symbol|
+|json  |root.basicdata.pointofsales["id"=3].name      |WooCommerce                                        |res_symbol|
+|json  |root.basicdata.pointofsales[name="Ebay"].id   |1                                                  |res_symbol|
+|json  |root.basicdata.pointofsales["name"="Ebay"].id |1                                                  |res_symbol|
+|json  |root.basicdata.pointofsales[number=456].name  |Ebay Kleinanzeigen                                 |res_symbol|
+|json  |root.basicdata.pointofsales["number"=456].name|Ebay Kleinanzeigen                                 |res_symbol|
+|json  |root.basicdata.pointofsales[number="456"].name|Ebay Kleinanzeigen                                 |res_symbol|
+|json  |root.basicdata.pointofsales[1]                |{"number":456,"name":"Ebay Kleinanzeigen","id":"2"}|res_symbol|
+|json  |root.basicdata.pointofsales["number"=456]     |{"number":456,"name":"Ebay Kleinanzeigen","id":"2"}|res_symbol|
+|json  |root.basicdata.plainarray[1]                  |nils                                               |res_symbol|
+|json  |root.basicdata.pointofsales[count]            |3                                                  |res_symbol|
+|json  |root.basicdata.plainarray[count]              |3                                                  |res_symbol|
+
+!style_code[Response Validation - parsing failed]
+!|My Api Response Body Validator                                                                                                                        |
+|Parser|Identifier                                   |Value?                                                                                 |=Value?   |
+|bla   |blabla.basicdata                             |Parser must be defined. Already supported: json                                        |res_symbol|
+|json  |blabla.basicdata                             |Syntax error: The first object needs to be root: root.example                          |res_symbol|
+|json  |root.basicdata.notexisting                   |Parser error: Not found: notexisting                                                   |res_symbol|
+|json  |root.basicdata.notexisting.name              |Parser error: Not found: notexisting                                                   |res_symbol|
+|json  |root.basicdata.notexisting["number"=46].name |Parser error: Not found: notexisting                                                   |res_symbol|
+|json  |root.basicdata.pointofsales["number"=46].name|Parser error: Not found: "number"=46                                                   |res_symbol|
+|json  |root.basicdata.plainarray["number"]          |Syntax error: Within the brackets you need a name:value pair: [name:value]             |res_symbol|
+|json  |root.basicdata.plainarray["number"=456]      |Syntax error: Within the brackets in last object you need an integer: root.beispiel[55]|res_symbol|
+|json  |root.basicdata.plainarray["count"]           |Syntax error: Within the brackets you need a name:value pair: [name:value]             |res_symbol|
+|json  |root[count]                                  |Parser error: No array found at this position: root                                    |res_symbol|
+|json  |root[count].name                             |Parser error: No array found at this position: root                                    |res_symbol|
+|json  |root.success[count]                          |Parser error: No array found at this position: success                                 |res_symbol|
+|json  |root.success[count].name                     |Parser error: No array found at this position: success                                 |res_symbol|
+|json  |root.success["number"=456]                   |Parser error: No array found at this position: success                                 |res_symbol|
+|json  |root.success["number"=456].name              |Parser error: No array found at this position: success                                 |res_symbol|
+
+
+
+
+
+---- Test Example - JSON 2 ----
+
+!style_code[Manipulate Response Body only for Validator Test]
+!|My Api Response Body             |
+|Body                    |Set Body?|
+|["bernd","nils","harry"]|ok       |
+
+!style_code[Check Response Body Content]
+!|My Api Response Body|
+|Get Body?            |
+|                     |
+
+!style_code[Response Validation - ok]
+!|My Api Response Body Validator     |
+|Parser|Identifier |Value?|=Value?   |
+|json  |root[1]    |nils  |res_symbol|
+|json  |root[count]|3     |res_symbol|
+
+
+
+---- Test Example - JSON 3 ----
+
+!style_code[Manipulate Response Body only for Validator Test]
+!|My Api Response Body                                                                                                                             |
+|Body                                                                                                                                    |Set Body?|
+|[{"id":"1","name":"Ebay","number":123},{"id":"2","name":"Ebay Kleinanzeigen","number":456},{"id":"3","name":"WooCommerce","number":789}]|ok       |
+
+!style_code[Check Response Body Content]
+!|My Api Response Body|
+|Get Body?            |
+|                     |
+
+!style_code[Response Validation - ok]
+!|My Api Response Body Validator                                                                    |
+|Parser|Identifier                   |Value?                                             |=Value?   |
+|json  |root[1]                      |{"number":456,"name":"Ebay Kleinanzeigen","id":"2"}|res_symbol|
+|json  |root[1].name                 |Ebay Kleinanzeigen                                 |res_symbol|
+|json  |root["name"="WooCommerce"]   |{"number":789,"name":"WooCommerce","id":"3"}       |res_symbol|
+|json  |root["name"="WooCommerce"].id|3                                                  |res_symbol|
+|json  |root[count]                  |3                                                  |res_symbol|
+
+
+

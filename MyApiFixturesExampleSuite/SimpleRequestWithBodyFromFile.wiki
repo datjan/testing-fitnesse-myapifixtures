@@ -1,0 +1,57 @@
+---
+Test
+---
+---- Path to FitNesse.jar and Fixture Project ----
+
+!path /Users/jan/Documents/FitNesse/fitnesse-standalone.jar
+!path /Users/jan/Documents/eclipse-workspace/MyApiFixtures/bin
+
+!define TEST_SYSTEM {fit}
+
+
+---- Import Fixtures ----
+
+|Import       |
+|myApiFixtures|
+
+
+
+
+---- Simple GET Request ----
+
+!style_code[Init]
+!|My Api Request Init                                                                                                                                    |
+|Method|Baseurl              |Path           |Body File Path                                                                                       |Init?|
+|POST  |http://192.168.178.51|/mockme/api.php|/Users/jan/Documents/FitNesse/FitNesseRoot/FitBackoffice/MyApiFixturesExampleSuite/SimpleRequest.json|ok   |
+
+!style_code[Check Body Content From File]
+!|My Api Request Body|
+|Get Body?           |
+|                    |
+
+!style_code[Manipulate Body Placeholders ${placeholder}]
+!|My Api Request Variables|
+|Name    |Value     |Init?|
+|type    |test      |ok   |
+|email   |fit@fit.de|ok   |
+|password|123abc!   |ok   |
+
+!style_code[Check Manipulated Body Content]
+!|My Api Request Body|
+|Get Body?           |
+|                    |
+
+!style_code[Send]
+!|My Api Send                                      |
+|Send Request?|Get Status Message?|Get Status Code?|
+|ok           |OK                 |200             |
+
+
+!style_code[Validate]
+!|My Api Response Body|
+|Get Body?            |
+|                     |
+
+
+
+
